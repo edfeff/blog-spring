@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -28,6 +29,31 @@ public class GsRelationalDataAccessApplication {
     JdbcTemplate jdbcTemplate;
 
     @Bean
+    public CommandLineRunner mysql() {
+        return args -> {
+            log.info("mysql");
+            log.info("创建表格");
+            jdbcTemplate.execute("DROP TABLE  IF EXISTS customers  ");
+            jdbcTemplate.execute("create table customers(id int(11) primary key auto_increment,first_name varchar(255),last_name varchar(255)) ");
+            log.info("插入数据");
+            List<Object[]> namesList = Arrays.asList("John Woo", "Jeff Dean", "Josh Bloch", "Josh Long")
+                    .stream().map(name -> name.split(" "))
+                    .collect(Collectors.toList());
+            namesList.stream().forEach(nameArr -> log.info(String.format("Insert customer record for %s %s", nameArr[0], nameArr[1])));
+
+            jdbcTemplate.batchUpdate("insert  into customers(first_name,last_name) values(?,?)", namesList);
+            log.info("查询数据");
+            jdbcTemplate.query("select id ,first_name,last_name from customers where first_name = ?",
+                    new Object[]{"John"}, (resultSet, i) -> new Customer(
+                            resultSet.getLong("id"),
+                            resultSet.getString("first_name"),
+                            resultSet.getString("last_name")
+                    )
+            ).forEach(customer -> log.info(customer.toString()));
+        };
+    }
+
+    //    @Bean
     public CommandLineRunner jdbc() {
         return args -> {
             log.info("创建表格");
