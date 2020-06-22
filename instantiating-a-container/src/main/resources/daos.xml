@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="accountDao" class="com.edfeff.instantiating.JpaAccountDao">
+        <constructor-arg name="name" value="accountDao"/>
+    </bean>
+    <bean id="itemDao" class="com.edfeff.instantiating.JpaItemDao">
+        <property name="name" value="itemDao"/>
+    </bean>
+</beans>
