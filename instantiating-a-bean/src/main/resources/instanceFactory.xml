@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--    实例工厂实例化-->
+    <bean name="instanceFactory" class="com.edfeff.instantiating.InstanceFactory"/>
+
+    <bean name="exampleBean" factory-bean="instanceFactory" factory-method="exampleBean"/>
+
+    <bean name="exampleTwoBean" factory-bean="instanceFactory" factory-method="exampleBeanTwo">
+        <constructor-arg name="name" value="exampleTwoBean"/>
+    </bean>
+
+</beans>

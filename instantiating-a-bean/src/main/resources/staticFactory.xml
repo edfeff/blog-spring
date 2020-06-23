@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--    静态工厂实例化-->
+    <!--    返回自身类型-->
+    <bean name="staticFactory" factory-method="getInstance" class="com.edfeff.instantiating.StaticFactory"/>
+    <!--    返回其他类型，无参数-->
+    <bean name="exampleBean" factory-method="getExamplBean" class="com.edfeff.instantiating.StaticFactory"/>
+    <!--    返回其他类型，有参数-->
+    <bean name="exampleTwoBean" factory-method="getExampleBeanTwo" class="com.edfeff.instantiating.StaticFactory">
+        <constructor-arg name="name" value="exampleTwoBean"/>
+    </bean>
+
+</beans>

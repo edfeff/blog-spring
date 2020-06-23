@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--    构造函数实例化-->
+    <!--     无参数-->
+    <bean id="exampleBean" class="com.edfeff.instantiating.ExampleBean">
+        <property name="name" value="exampleBean"/>
+    </bean>
+    <!--     有参数-->
+    <bean id="exampleBeanTwo" class="com.edfeff.instantiating.ExampleBeanTwo">
+        <constructor-arg name="name" value="exampleBeanTwo"/>
+    </bean>
+
+
+</beans>
