@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- depends-on 会导致依赖项先被初始化-->
+    <!--    init 顺序-->
+    <!--    init com.edfeff.Manager
+            init com.edfeff.JdbcAccountDao
+            init com.edfeff.ExampleBean-->
+
+    <!--    销毁顺序 是自己 ，然后是依赖的你顺序-->
+    <!--    destroy com.edfeff.ExampleBean
+            destroy com.edfeff.JdbcAccountDao
+            destroy com.edfeff.Manager-->
+    <!--    -->
+    <bean class="com.edfeff.ExampleBean" name="exampleBean" depends-on="manager,accountDao">
+        <property name="manager" ref="manager"/>
+    </bean>
+
+    <bean class="com.edfeff.Manager" name="manager"/>
+    <bean class="com.edfeff.JdbcAccountDao" name="accountDao"/>
+</beans>
