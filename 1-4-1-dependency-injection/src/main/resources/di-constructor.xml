@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--    -->
+    <bean name="movieFinder" class="com.edfeff.MovieFinder"/>
+
+    <bean name="simpleMovieLister" class="com.edfeff.SimpleMovieLister">
+        <constructor-arg name="movieFinder" ref="movieFinder"/>
+    </bean>
+
+    <bean name="simpleMovieLister2" class="com.edfeff.SimpleMovieLister">
+        <constructor-arg ref="movieFinder"/>
+    </bean>
+    <!--    c namespace-->
+    <bean name="simpleMovieLister3"
+          class="com.edfeff.SimpleMovieLister"
+          c:movieFinder-ref="movieFinder"/>
+
+    <!--    inner bean-->
+    <bean name="simpleMovieLister4"
+          class="com.edfeff.SimpleMovieLister">
+        <constructor-arg name="movieFinder">
+            <bean class="com.edfeff.MovieFinder"/>
+        </constructor-arg>
+    </bean>
+
+
+    <!--    -->
+    <bean name="two" class="com.edfeff.ThingTwo"/>
+    <bean name="three" class="com.edfeff.ThingThree"/>
+    <!-- 利用type-->
+    <bean class="com.edfeff.ThingOne" name="thingOne">
+        <constructor-arg ref="two"/>
+        <constructor-arg ref="three"/>
+    </bean>
+    <bean class="com.edfeff.ThingOne" name="thingOneBak">
+        <constructor-arg>
+            <ref bean="two"/>
+        </constructor-arg>
+        <constructor-arg>
+            <ref bean="three"/>
+        </constructor-arg>
+    </bean>
+    <!--    利用name-->
+    <bean class="com.edfeff.ThingOne" name="thingOne2">
+        <constructor-arg name="thingThree" ref="three"/>
+        <constructor-arg name="thingTwo" ref="two"/>
+    </bean>
+    <bean class="com.edfeff.ThingOne"
+          c:thingThree-ref="three"
+          c:thingTwo-ref="two"
+    />
+
+
+    <!--    利用index-->
+    <bean class="com.edfeff.ThingOne" name="thingOne3">
+        <constructor-arg index="0" ref="two"/>
+        <constructor-arg index="1" ref="three"/>
+    </bean>
+    <bean class="com.edfeff.ThingOne"
+          c:_0-ref="two"
+          c:_1-ref="three"
+    />
+
+    <!--    基础类型 指定type -->
+    <bean name="exampleBean" class="com.edfeff.ExampleBean">
+        <constructor-arg type="int" value="1"/>
+        <constructor-arg type="java.lang.String" value="2"/>
+    </bean>
+    <!--    组合使用-->
+    <bean name="exampleBean2" class="com.edfeff.ExampleBean">
+        <constructor-arg name="years" value="1"/>
+        <constructor-arg name="ultimateAnswer" value="2"/>
+    </bean>
+
+    <!--    properties-->
+    <bean class="com.edfeff.PropertiesBean" name="propertiesBean1">
+        <constructor-arg>
+            <props>
+                <prop key="k1">v1</prop>
+                <prop key="k2">v2</prop>
+                <prop key="k3">v3</prop>
+            </props>
+        </constructor-arg>
+    </bean>
+
+    <bean class="com.edfeff.PropertiesBean" name="propertiesBean2">
+        <constructor-arg>
+            <value>
+                k4=v4
+                k5=v5
+                k6=v6
+            </value>
+        </constructor-arg>
+    </bean>
+
+</beans>

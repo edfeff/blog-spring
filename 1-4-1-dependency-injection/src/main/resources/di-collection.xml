@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean name="collectionBean1" class="com.edfeff.CollectionBean">
+        <constructor-arg name="properties">
+            <props>
+                <prop key="k1">v1</prop>
+                <prop key="k2">v1</prop>
+                <prop key="vv">v1</prop>
+            </props>
+        </constructor-arg>
+
+        <constructor-arg name="list">
+            <list>
+                <value>1</value>
+                <value>2</value>
+            </list>
+        </constructor-arg>
+
+        <constructor-arg name="map">
+            <map>
+                <entry key="k1" value="v1"/>
+                <entry key="k2" value="v1"/>
+            </map>
+        </constructor-arg>
+
+        <constructor-arg name="set">
+            <set>
+                <value>1</value>
+                <value>2</value>
+            </set>
+        </constructor-arg>
+    </bean>
+
+
+    <bean class="com.edfeff.CollectionBean" name="collectionBean2">
+        <property name="properties" ref="properties"/>
+        <property name="map" ref="map"/>
+        <property name="list" ref="list"/>
+        <property name="set" ref="set"/>
+    </bean>
+
+    <bean class="java.util.ArrayList" name="list">
+        <constructor-arg name="c">
+            <list>
+                <value>1</value>
+                <value>2</value>
+            </list>
+        </constructor-arg>
+    </bean>
+    <bean class="java.util.HashSet" name="set">
+        <constructor-arg name="c">
+            <set>
+                <value>1</value>
+                <value>2</value>
+            </set>
+        </constructor-arg>
+    </bean>
+    <bean class="java.util.HashMap" name="map">
+        <constructor-arg name="m">
+            <map>
+                <entry key="k1" value="v1"/>
+            </map>
+        </constructor-arg>
+    </bean>
+    <bean class="java.util.Properties" name="properties">
+        <constructor-arg name="defaults">
+            <props>
+                <prop key="p1">v1</prop>
+            </props>
+        </constructor-arg>
+    </bean>
+
+
+    <bean name="parent" class="com.edfeff.CollectionBean">
+        <property name="properties">
+            <props merge="true">
+                <prop key="p1">v1</prop>
+                <prop key="p2">v1</prop>
+            </props>
+        </property>
+        <property name="map">
+            <map merge="true">
+                <entry key="k1" value="v1"/>
+            </map>
+        </property>
+        <property name="list">
+            <list merge="true">
+                <value>1</value>
+                <value>2</value>
+            </list>
+        </property>
+        <property name="set">
+            <set merge="true">
+                <value>1</value>
+                <value>2</value>
+            </set>
+        </property>
+    </bean>
+    <!--    parent -->
+    <bean class="com.edfeff.CollectionBean" id="child" parent="parent">
+        <property name="properties">
+            <props merge="true">
+                <prop key="p1">v2</prop>
+                <prop key="p3">v3</prop>
+            </props>
+        </property>
+        <property name="map">
+            <map merge="true">
+                <entry key="k1" value="v2"/>
+                <entry key="k2" value="v2"/>
+            </map>
+        </property>
+        <property name="list">
+            <list merge="true">
+                <value>3</value>
+            </list>
+        </property>
+        <property name="set">
+            <set merge="true">
+                <value>1</value>
+                <value>2</value>
+            </set>
+        </property>
+    </bean>
+
+</beans>
