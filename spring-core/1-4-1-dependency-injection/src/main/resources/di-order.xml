@@ -3,8 +3,8 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         https://www.springframework.org/schema/beans/spring-beans.xsd">
-    <bean scope="prototype" class="com.edfeff.BeanA" name="a"/>
-    <bean scope="prototype" class="com.edfeff.BeanB" name="b">
+    <bean scope="prototype" class="com.edfeff._5.BeanA" name="a"/>
+    <bean scope="prototype" class="com.edfeff._5.BeanB" name="b">
         <constructor-arg name="a" ref="a"/>
     </bean>
     <bean class="com.edfeff.BeanC" name="c">

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd"
+>
+    <bean class="com.edfeff._6.Command" scope="prototype" id="command"/>
+
+    <!--    错误的使用示例-->
+    <bean class="com.edfeff._6.WrongCommandManager" scope="singleton" p:command-ref="command"/>
+
+
+    <!--    跨scope,使用getBean-->
+    <bean class="com.edfeff._6.CommandManager" scope="singleton"/>
+
+
+    <!--    跨scope,使用方法注入Lookup-->
+    <bean class="com.edfeff._6.LookupCommandManager" scope="singleton">
+        <lookup-method name="createCommand" bean="command"/>
+    </bean>
+
+</beans>
