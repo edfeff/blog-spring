@@ -1,0 +1,10 @@
+==========================
+使用 banner.txt 自定义banner
+使用一些变量
+
+application.version: ${application.version}
+application.title: ${application.title}
+application.formatted-version: ${application.formatted-version}
+spring-boot.version: ${spring-boot.version}
+spring-boot.formatted-version:  ${spring-boot.formatted-version}
+==========================

@@ -5,10 +5,10 @@
         https://www.springframework.org/schema/beans/spring-beans.xsd"
        default-lazy-init="false"
 >
-    <bean name="lazyBean1" class="com.edfeff.LazyBean" lazy-init="true"/>
+    <bean name="lazyBean1" class="com.edfeff.LazyInitBean" lazy-init="true"/>
     <bean name="notLazyBean" class="com.edfeff.NotLazyBean" lazy-init="false"/>
 
-    <bean name="lazyBean2" class="com.edfeff.LazyBean"/>
+    <bean name="lazyBean2" class="com.edfeff.LazyInitBean"/>
     <bean name="refLazyBean" class="com.edfeff.RefLazyBean">
         <property name="lazyBean" ref="lazyBean2"/>
     </bean>
