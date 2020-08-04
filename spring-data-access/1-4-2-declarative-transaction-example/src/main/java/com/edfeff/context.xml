@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="url"
+                  value="jdbc:mysql://localhost:3306/example?characterEncoding=utf8&amp;useSSL=false&amp;serverTimezone=UTC&amp;rewriteBatchedStatements=true"/>
+        <property name="username" value="admin"/>
+        <property name="password" value="admin"/>
+    </bean>
+
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+
+    <bean class="com.edfeff.service.impl.DefaultFooService" id="fooService"/>
+
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <!-- all methods starting with 'get' are read-only -->
+            <tx:method name="get**" read-only="true"/>
+            <!-- other methods use the default transaction settings (see below) -->
+            <tx:method name="*" rollback-for="RuntimeException" no-rollback-for="UnsupportedOperationException"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="fooServiceOperation" expression="execution(* com.edfeff.service.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="fooServiceOperation"/>
+    </aop:config>
+</beans>
+        <!--检查前面的配置。
+        它假定您要使服务对象fooService bean成为事务性的。
+        要应用的事务语义封装在<tx：advice />定义中。
+        <tx：advice />定义为“以get开头的所有方法都将在只读事务的上下文中运行，而所有其他方法都将以默认事务语义运行”。
+        <tx：advice />标记的transaction-manager属性设置为要驱动事务的TransactionManager bean的名称
+        （在本例中为txManager bean）。
+
+        <aop：config />定义可确保由txAdvice bean定义的事务建议在程序的适当位置运行。
+        首先，定义一个切入点，该切入点与FooService接口（fooServiceOperation）中定义的任何操作的执行相匹配。
+        然后，使用顾问程序将切入点与txAdvice关联。
+        结果表明，在执行fooServiceOperation时，将运行txAdvice定义的建议。
+
+        在<aop：pointcut />元素中定义的表达式是AspectJ切入点表达式。有关Spring中切入点表达式的更多详细信息，请参见AOP部分。
+
+        前面显示的配置用于围绕从fooService bean定义创建的对象创建事务代理。
+        代理配置有事务建议，以便在代理上调用适当的方法时，根据与该方法关联的事务配置，事务将被启动，挂起，标记为只读等等。
+        考虑下面的程序，该程序测试驱动前面显示的配置：
+        -->
+
+        <!--commit-->
+        <!--
+        o.s.transaction.interceptor.NameMatchTransactionAttributeSource - Adding transactional method [get**] with attribute [PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly]
+        o.s.transaction.interceptor.NameMatchTransactionAttributeSource - Adding transactional method [*] with attribute [PROPAGATION_REQUIRED,ISOLATION_DEFAULT]
+
+        o.s.jdbc.datasource.DataSourceTransactionManager - Creating new transaction with name [com.edfeff.service.impl.DefaultFooService.insertFoo]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+        o.s.jdbc.datasource.DataSourceTransactionManager - Acquired Connection [jdbc:mysql://localhost:3306/example?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true, UserName=admin@localhost, MySQL Connector/J] for JDBC transaction
+        o.s.jdbc.datasource.DataSourceTransactionManager - Switching JDBC Connection [jdbc:mysql://localhost:3306/example?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true, UserName=admin@localhost, MySQL Connector/J] to manual commit
+        insert
+        o.s.jdbc.datasource.DataSourceTransactionManager - Initiating transaction commit
+        o.s.jdbc.datasource.DataSourceTransactionManager - Committing JDBC transaction on Connection [jdbc:mysql://localhost:3306/example?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true, UserName=admin@localhost, MySQL Connector/J]
+        o.s.jdbc.datasource.DataSourceTransactionManager - Releasing JDBC Connection [jdbc:mysql://localhost:3306/example?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true, UserName=admin@localhost, MySQL Connector/J] after transaction
+        -->
+
+        <!--rollback-->
+        <!--
+        o.s.transaction.interceptor.NameMatchTransactionAttributeSource - Adding transactional method [get**] with attribute [PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly]
+        o.s.transaction.interceptor.NameMatchTransactionAttributeSource - Adding transactional method [*] with attribute [PROPAGATION_REQUIRED,ISOLATION_DEFAULT]
+        o.s.jdbc.datasource.DataSourceTransactionManager - Creating new transaction with name [com.edfeff.service.impl.DefaultFooService.insertFoo]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+        o.s.jdbc.datasource.DataSourceTransactionManager - Acquired Connection [jdbc:mysql://localhost:3306/example?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true, UserName=admin@localhost, MySQL Connector/J] for JDBC transaction
+        o.s.jdbc.datasource.DataSourceTransactionManager - Switching JDBC Connection [jdbc:mysql://localhost:3306/example?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true, UserName=admin@localhost, MySQL Connector/J] to manual commit
+        insert
+        o.s.jdbc.datasource.DataSourceTransactionManager - Initiating transaction rollback
+        o.s.jdbc.datasource.DataSourceTransactionManager - Rolling back JDBC transaction on Connection [jdbc:mysql://localhost:3306/example?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true, UserName=admin@localhost, MySQL Connector/J]
+        o.s.jdbc.datasource.DataSourceTransactionManager - Releasing JDBC Connection [jdbc:mysql://localhost:3306/example?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true, UserName=admin@localhost, MySQL Connector/J] after transaction
+        Exception in thread "main" java.lang.UnsupportedOperationException: 发出个异常
+        -->
+
