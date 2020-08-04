@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="url"
+                  value="jdbc:mysql://localhost:3306/example?characterEncoding=utf8&amp;useSSL=false&amp;serverTimezone=UTC&amp;rewriteBatchedStatements=true"/>
+        <property name="username" value="admin"/>
+        <property name="password" value="admin"/>
+    </bean>
+
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!--    设置 txManager的切面位置-->
+    <!--    <tx:annotation-driven transaction-manager="txManager" order="200"/>-->
+
+
+    <!--    注入一个简单切面-->
+    <!--    自定义切面的order -->
+    <bean id="profiler" class="com.edfeff.model.SimpleProfiler">
+        <property name="order" value="1"/>
+    </bean>
+    <!--    <aop:config>-->
+    <!--        <aop:aspect id="profileAspect" ref="profiler">-->
+    <!--            <aop:pointcut id="serviceMethodWithReturnValue" expression="execution(!void com.edfeff.service.*.*(..))"/>-->
+    <!--            <aop:around method="profile" pointcut-ref="serviceMethodWithReturnValue"/>-->
+    <!--        </aop:aspect>-->
+    <!--    </aop:config>-->
+
+    <!--    组合自定义切面和事务切面-->
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <tx:method name="get**" read-only="true"/>
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="allServiceMethod" expression="execution(* com.edfeff.service.*.*(..))"/>
+        <aop:pointcut id="serviceMethodWithReturnValue" expression="execution(!void com.edfeff.service.*.*(..))"/>
+
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="allServiceMethod" order="2"/>
+
+        <aop:aspect id="profileAspect" ref="profiler">
+            <aop:around method="profile" pointcut-ref="serviceMethodWithReturnValue"/>
+        </aop:aspect>
+
+    </aop:config>
+
+
+    <bean class="com.edfeff.service.impl.DefaultBarService" id="barService"/>
+    <bean class="com.edfeff.service.impl.DefaultFooService" id="fooService" c:barService-ref="barService"/>
+
+
+</beans>

@@ -22,10 +22,17 @@ public class DefaultFooService implements FooService {
     public Foo getFoo(String fooName) {
         // ...
         System.out.println("getfoo fooName");
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Foo foo = new Foo();
         foo.setFooName(fooName);
         foo.setBarName(fooName);
-        return foo;
+//        return foo;
+        throw new UnsupportedOperationException("发出get 个异常");
     }
 
     @Override

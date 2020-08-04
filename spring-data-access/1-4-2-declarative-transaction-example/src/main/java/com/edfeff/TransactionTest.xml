@@ -54,8 +54,8 @@
             <!--            <tx:method name="barInsertFoo" read-only="false"/>-->
 
 
-            <tx:method name="insertFoo" no-rollback-for="UnsupportedOperationException"/>
-            <tx:method name="barInsertFoo" no-rollback-for="UnsupportedOperationException"/>
+<!--            <tx:method name="insertFoo" no-rollback-for="UnsupportedOperationException"/>-->
+            <!--            <tx:method name="barInsertFoo" no-rollback-for="UnsupportedOperationException"/>-->
 
 
             <tx:method name="*"/>

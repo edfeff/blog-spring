@@ -17,8 +17,12 @@ public class DefaultBarService implements BarService {
 
     @Override
     public void barInsertFoo(Foo foo) {
+//        try {
         System.out.println("foo insert");
         throw new UnsupportedOperationException("form bar unsupported");
+//        } catch (UnsupportedOperationException e) {
+//            System.out.println("bar 中 捕获异常");
+//        }
     }
 
     @Override
