@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:c="http://www.springframework.org/schema/c"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
@@ -14,17 +14,51 @@
 
     <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
+
+        <!--        内外层事务特性不一致时，内层是否使用外部事务 ，默认为false。外部特性覆盖内部特性-->
+        <property name="validateExistingTransaction" value="true"/>
+
+        <!--        是否支持内嵌事务-->
+        <!--        <property name="nestedTransactionAllowed" value="false"/>-->
+
     </bean>
 
 
-    <bean class="com.edfeff.service.impl.DefaultFooService" id="fooService"/>
+    <bean class="com.edfeff.service.impl.DefaultBarService" id="barService"/>
+    <bean class="com.edfeff.service.impl.DefaultFooService" id="fooService" c:barService-ref="barService"/>
 
     <tx:advice id="txAdvice" transaction-manager="txManager">
         <tx:attributes>
             <!-- all methods starting with 'get' are read-only -->
             <tx:method name="get**" read-only="true"/>
+
             <!-- other methods use the default transaction settings (see below) -->
-            <tx:method name="*" rollback-for="RuntimeException" no-rollback-for="UnsupportedOperationException"/>
+
+            <!--            使用 rollback-for 和 no-rollback-for  设置特定异常回滚 -->
+            <!--            <tx:method name="*" rollback-for="RuntimeException" no-rollback-for="UnsupportedOperationException"/>-->
+
+            <!--            每个方法都使用新的事务，即使内部方法发生以异常，不会滚外部事务-->
+            <!--            <tx:method name="*" propagation="REQUIRES_NEW"/>-->
+
+            <!--            外层方法使用 REQUIRED ，内层方法使用 REQUIRES_NEW ，则内层方法失败时，内层回滚，外层不影响-->
+            <!--            <tx:method name="insertFoo" propagation="REQUIRED"/>-->
+            <!--            <tx:method name="barInsertFoo" propagation="REQUIRES_NEW"/>-->
+
+
+            <!--            如果设置了  TransactionManager 的validateExistingTransaction=true-->
+            <!--            readOnly 不一致时，则会进行下面的验证-->
+            <!--            外部事务为只读，内部事务为读写时，抛出异常-->
+            <!--Exception in thread "main" org.springframework.transaction.IllegalTransactionStateException:
+            Participating transaction with definition [PROPAGATION_REQUIRED,ISOLATION_DEFAULT] is not marked as read-only but existing transaction is-->
+            <!--            <tx:method name="insertFoo" read-only="true"/>-->
+            <!--            <tx:method name="barInsertFoo" read-only="false"/>-->
+
+
+            <tx:method name="insertFoo" no-rollback-for="UnsupportedOperationException"/>
+            <tx:method name="barInsertFoo" no-rollback-for="UnsupportedOperationException"/>
+
+
+            <tx:method name="*"/>
         </tx:attributes>
     </tx:advice>
 
