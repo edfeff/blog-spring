@@ -16,7 +16,8 @@ public class Configuration {
     public DataSource dataSource() {
         BasicDataSource basicDataSource = new BasicDataSource();
 
-        basicDataSource.setUrl("jdbc:mysql://localhost:3306/example?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true");
+//        basicDataSource.setUrl("jdbc:mysql://localhost:3306/example?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true");
+        basicDataSource.setUrl("jdbc:mysql://192.168.31.215:3306/example?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true");
         basicDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         basicDataSource.setUsername("admin");
         basicDataSource.setPassword("admin");

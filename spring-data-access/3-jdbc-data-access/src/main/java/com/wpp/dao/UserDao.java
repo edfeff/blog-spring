@@ -105,6 +105,22 @@ public class UserDao {
         jdbcTemplate.update("delete from users where firstName= ?", firstName);
     }
 
+    //----------execute
+    //----------execute
+    //----------execute
+    public void createSampleTable(String name) {
+        this.jdbcTemplate.execute(String.format("create table if not exists %s (id int,name varchar(32))", name));
+    }
+
+    public void addUserToDB(String name, String password) {
+        String createUserSQL = "create user '" + name + "'@'%' identified by '" + password + "'";
+        this.jdbcTemplate.execute(createUserSQL);
+
+        String grantSQL = "grant all privileges on *.* to  '" + name + "'@'%' with grant option";
+        this.jdbcTemplate.execute(grantSQL);
+
+        this.jdbcTemplate.execute("flush privileges ");
+    }
 
 }
 
