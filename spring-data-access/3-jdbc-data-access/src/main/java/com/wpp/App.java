@@ -43,7 +43,7 @@ public class App {
 
         dao.updateUser(2, new Users("u2", "l2", null, null));
 
-        dao.createSampleTable("t1");
-        dao.addUserToDB("wpp", "wpp");
+//        dao.createSampleTable("t1");
+//        dao.addUserToDB("wpp", "wpp");
     }
 }
