@@ -2,20 +2,30 @@ package com.wpp.dao;
 
 import com.wpp.model.Users;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class UserDao {
     @Autowired
     JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    @Qualifier(value = "namedParameterJdbcTemplate")
+    NamedParameterJdbcTemplate parameterJdbcTemplate;
 
     //    -------------------QUERY
     //    -------------------QUERY
@@ -30,8 +40,22 @@ public class UserDao {
         return jdbcTemplate.queryForObject("select count(1) from users where firstName = ? ", Integer.class, firstName);
     }
 
+    public int findUserCountByFirstName_params(String firstName) {
+        String sql = "select count(1) from users where firstName = :firstName";
+//        namedParameterJdbcTemplate.queryForObject("")
+        SqlParameterSource source = new MapSqlParameterSource("firstName", firstName);
+        return parameterJdbcTemplate.queryForObject(sql, source, Integer.class);
+    }
+
+
     public String findFirstNameById(Integer id) {
         return jdbcTemplate.queryForObject("select firstName from users where id =?", String.class, id);
+    }
+
+    public String findFirstNameById_params(Integer id) {
+        String sql = "select firstName from users where id = :id";
+        Map<String, Integer> params = Collections.singletonMap("id", id);
+        return parameterJdbcTemplate.queryForObject(sql, params, String.class);
     }
 
     public Users findByUserId(Integer id) {

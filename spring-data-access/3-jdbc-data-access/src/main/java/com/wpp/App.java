@@ -24,8 +24,12 @@ public class App {
         userService.countUser();
 
         UserDao dao = context.getBean(UserDao.class);
+
         System.out.println(dao.findUserCountByFirstName("John0"));
+        System.out.println(dao.findUserCountByFirstName_params("John0"));
+
         System.out.println(dao.findFirstNameById(1));
+        System.out.println(dao.findFirstNameById_params(1));
 
 
         Users john = dao.findByUserId(1);
