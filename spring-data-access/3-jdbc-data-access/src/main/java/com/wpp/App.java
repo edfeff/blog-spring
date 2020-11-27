@@ -27,6 +27,7 @@ public class App {
 
         System.out.println(dao.findUserCountByFirstName("John0"));
         System.out.println(dao.findUserCountByFirstName_params("John0"));
+        System.out.println(dao.findUserCountByFirstName_bean_params("John0"));
 
         System.out.println(dao.findFirstNameById(1));
         System.out.println(dao.findFirstNameById_params(1));

@@ -6,7 +6,14 @@
 
     <groupId>com.edfeff</groupId>
     <artifactId>blog-spring</artifactId>
+    <packaging>pom</packaging>
     <version>0.0.1</version>
+    <modules>
+        <module>rabbitmq</module>
+        <module>activemq</module>
+        <module>method-replacer</module>
+        <module>cglib</module>
+    </modules>
 
 
 </project>

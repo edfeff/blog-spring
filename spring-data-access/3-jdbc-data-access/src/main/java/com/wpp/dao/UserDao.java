@@ -1,10 +1,12 @@
 package com.wpp.dao;
 
+import com.wpp.model.NameParameter;
 import com.wpp.model.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -47,6 +49,16 @@ public class UserDao {
         return parameterJdbcTemplate.queryForObject(sql, source, Integer.class);
     }
 
+    public int findUserCountByFirstName_bean_params(String firstName) {
+        String sql = "select count(1) from users where firstName = :firstName";
+
+        NameParameter parameter = new NameParameter();
+        parameter.setFirstName(firstName);
+
+        SqlParameterSource source = new BeanPropertySqlParameterSource(parameter);
+
+        return parameterJdbcTemplate.queryForObject(sql, source, Integer.class);
+    }
 
     public String findFirstNameById(Integer id) {
         return jdbcTemplate.queryForObject("select firstName from users where id =?", String.class, id);

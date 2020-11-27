@@ -1,0 +1,16 @@
+{
+  "requiredProfileProperties": [
+    "*"
+  ],
+  "requireSegments": true,
+  "events": [
+    {
+      "eventType": "kafkaEvent",
+      "scope": "systemscope",
+      "properties": {
+        "id": "111"
+      }
+    }
+  ],
+  "sessionId": "1"
+}
