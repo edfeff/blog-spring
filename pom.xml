@@ -13,6 +13,8 @@
         <module>activemq</module>
         <module>method-replacer</module>
         <module>cglib</module>
+        <module>thread</module>
+        <module>jdbc</module>
     </modules>
 
 
