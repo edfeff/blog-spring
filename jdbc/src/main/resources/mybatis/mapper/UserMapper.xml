@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace:命名空间(配置bean的全路径Mapper)  注意:一个项目中命名空间必须唯一 -->
+<mapper namespace="mybatis.UserMapper"> <!--全限定mapper名-->
+    <insert id="insertUser" parameterType="User">
+        insert into example.user(username, password)
+        values (#{username}, #{password})
+    </insert>
+
+    <select id="getUser" resultType="User" parameterType="java.lang.Integer">
+        select *
+        from example.user
+        where id = #{id}
+    </select>
+
+</mapper>

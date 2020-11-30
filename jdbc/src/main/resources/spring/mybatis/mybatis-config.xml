@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!-- 核心配置 -->
+<configuration>
+    <!-- 引入classpath下的jdbc的配置文件 -->
+    <!--    <properties resource="jdbc.properties"></properties>-->
+    <settings>
+        <setting name="cacheEnabled" value="false"/>
+        <setting name="useGeneratedKeys" value="true"/>
+        <setting name="defaultExecutorType" value="REUSE"/>
+    </settings>
+
+    <typeAliases>
+        <typeAlias type="mybatis.User" alias="User"/>
+    </typeAliases>
+
+    <!-- 这个mappers代表的是相应的ORM映射文件 -->
+    <mappers>
+        <!-- 引入写sql语句的mapper配置文件  注意多个bean则引入多个mapper映射文件哦 -->
+        <mapper resource="spring/mybatis/mapper/UserMapper.xml"/>
+    </mappers>
+</configuration>

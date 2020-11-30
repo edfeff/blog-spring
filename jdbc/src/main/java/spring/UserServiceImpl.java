@@ -39,6 +39,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
     public List<User> getUsers() {
         return jdbcTemplate.query(selectAllUserSql, new UserRowMapper());
     }
