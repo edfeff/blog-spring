@@ -33,6 +33,12 @@ public class User {
     public User() {
     }
 
+    public User(Integer id, String username, String password) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+    }
+
     public User(Integer id, String username, String password, String name, String avatar, String remember_token, Date created_at, Date updated_at) {
         this.id = id;
         this.username = username;

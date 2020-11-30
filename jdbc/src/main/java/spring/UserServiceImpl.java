@@ -16,6 +16,7 @@ public class UserServiceImpl implements UserService {
 
     private String selectAllUserSql = "select * from godmin.goadmin_users";
 
+    @Override
     public void save(User user) {
         jdbcTemplate.update(
                 insertUserSql,

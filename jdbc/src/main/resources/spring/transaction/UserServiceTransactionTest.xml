@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/example"/>
+        <property name="initialSize" value="3"/>
+        <property name="maxActive" value="5"/>
+        <property name="maxIdle" value="3"/>
+        <property name="minIdle" value="2"/>
+    </bean>
+
+    <!--    事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!--    支持事务注解-->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <bean class="spring.transaction.UserServiceTranscationImpl" id="userService">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+</beans>
