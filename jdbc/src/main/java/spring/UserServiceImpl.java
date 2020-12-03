@@ -27,8 +27,8 @@ public class UserServiceImpl implements UserService {
                         user.getAvatar(),
                         user.getRemember_token(),
                         user.getCreated_at(),
-                        user.getUpdated_at()},
-                new int[]{
+                        user.getUpdated_at()}
+                , new int[]{
                         Types.VARCHAR,
                         Types.VARCHAR,
                         Types.VARCHAR,

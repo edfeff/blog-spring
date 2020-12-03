@@ -15,6 +15,7 @@
         <module>cglib</module>
         <module>thread</module>
         <module>jdbc</module>
+        <module>tomcat</module>
     </modules>
 
 
